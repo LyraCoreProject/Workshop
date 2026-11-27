@@ -13,6 +13,20 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 const API: &str = "https://api.github.com";
 const MAX_PAGES: usize = 10;
+// A pull request description is untrusted and each reference costs a request.
+const MAX_CLOSING_REFERENCES: usize = 5;
+
+/// GitHub answered 404: the record does not exist, which is not a failed refresh.
+#[derive(Debug)]
+pub struct NotFound;
+
+impl std::fmt::Display for NotFound {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("404 Not Found")
+    }
+}
+
+impl std::error::Error for NotFound {}
 
 pub trait GitHub: Send + Sync {
     /// The JSON body of every page of a GET on `path`, which starts with `/`.
@@ -62,6 +76,9 @@ impl GitHub for RestClient {
                 .await
                 .with_context(|| format!("GET {path}"))?;
             let status = response.status();
+            if status == reqwest::StatusCode::NOT_FOUND {
+                return Err(anyhow::Error::new(NotFound).context(format!("GET {path}")));
+            }
             if !status.is_success() {
                 bail!(
                     "GET {path}: {status}{}",
@@ -216,10 +233,15 @@ where
     let reviews =
         records(list(format!("{repo}/pulls/{}/reviews?per_page=100", pull.number)).await?);
     let mut referenced = Vec::new();
-    for number in closing_numbers(pull.body.as_deref().unwrap_or("")) {
-        referenced.extend(records::<Issue>(
-            list(format!("{repo}/issues/{number}")).await?,
-        ));
+    for number in closing_numbers(pull.body.as_deref().unwrap_or(""))
+        .into_iter()
+        .take(MAX_CLOSING_REFERENCES)
+    {
+        match list(format!("{repo}/issues/{number}")).await {
+            Ok(issue) => referenced.extend(records::<Issue>(issue)),
+            Err(error) if error.downcast_ref::<NotFound>().is_some() => {}
+            Err(error) => return Err(error),
+        }
     }
     let closed_a_task = referenced
         .iter()
@@ -279,7 +301,7 @@ pub mod fake {
             self.requests.lock().unwrap().push(path.to_owned());
             match self.routes.get(path) {
                 Some(value) => Ok(vec![value.clone()]),
-                None => bail!("GET {path}: 404 Not Found"),
+                None => Err(anyhow::Error::new(NotFound).context(format!("GET {path}"))),
             }
         }
     }
@@ -380,8 +402,9 @@ mod tests {
         let config = test_config();
         let mut cache = MergedCache::default();
         let raw = fetch(&gh, &config, &mut cache).await.unwrap();
-        // 3 lists, 3 claimed tasks, 2 per open outside pull request, and the merged details once.
-        assert_eq!(gh.request_count(), 3 + 3 + 4 + 5);
+        // 3 lists, 3 claimed tasks, 2 per open outside pull request, and the merged details once,
+        // one of them for an issue that does not exist.
+        assert_eq!(gh.request_count(), 3 + 3 + 4 + 6);
 
         let now = "2026-11-27T20:00:00Z".parse().unwrap();
         let snapshot = build(&raw, &config, now);
@@ -451,7 +474,7 @@ mod tests {
         let error = fetch(&gh, &test_config(), &mut MergedCache::default())
             .await
             .unwrap_err();
-        assert!(error.to_string().contains("404"));
+        assert!(format!("{error:#}").contains("404"));
     }
 
     #[test]

@@ -219,6 +219,7 @@ pub fn rules_text(repository: &str) -> String {
          3. Within 24 hours, open a draft pull request whose description says `Closes #N`, or the claim ends. Comment /release on the issue to give it up.\n\
          4. A check comments on your pull request with its review lane: fast lane, slow lane or failed. Fix what a failed check names.\n\
          5. Review other outside pull requests: list_reviews_wanted.\n\
+         The repository's `contribute-fix` skill (.claude/skills/contribute-fix/SKILL.md) walks an agent through all of it.\n\
          Workshop only reads. It never claims, comments or reviews for you.\n\
          Full rules: https://github.com/{repository}/blob/main/CONTRIBUTING.md"
     )

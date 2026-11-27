@@ -15,7 +15,7 @@
     {
       "number": 2901,
       "title": "docs: a typo in the quickstart",
-      "body": "Fixes: #1901",
+      "body": "Fixes: #1901 and fixes #99999",
       "user": {"login": "cy-dev", "type": "User"},
       "labels": [],
       "pull_request": {"merged_at": "2026-11-24T09:00:00Z"},
