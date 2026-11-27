@@ -1,0 +1,7 @@
+[
+  {"id": 301, "user": {"login": "cy-dev", "type": "User"}, "body": "Checked against vmangos: Kick ends the cast and starts the lockout.", "state": "COMMENTED", "submitted_at": "2026-11-27T13:00:00Z"},
+  {"id": 302, "user": {"login": "ada-dev", "type": "User"}, "body": "Answering my own question.", "state": "COMMENTED", "submitted_at": "2026-11-27T13:10:00Z"},
+  {"id": 303, "user": {"login": "Mathih13", "type": "User"}, "body": "", "state": "APPROVED", "submitted_at": "2026-11-27T13:20:00Z"},
+  {"id": 304, "user": {"login": "dee-dev", "type": "User"}, "body": "half written", "state": "PENDING"},
+  {"id": 305, "user": {"login": "copilot-pull-request-reviewer[bot]", "type": "Bot"}, "body": "Looks fine.", "state": "COMMENTED", "submitted_at": "2026-11-27T11:30:00Z"}
+]

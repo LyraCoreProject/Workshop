@@ -1,0 +1,10 @@
+{
+  "number": 1900,
+  "title": "Frost Nova roots end early",
+  "state": "closed",
+  "body": "**Expected (1.12.1).** Frost Nova roots for 8 seconds.",
+  "labels": [{"name": "bug"}, {"name": "P2"}, {"name": "ready-for-agent"}],
+  "assignees": [{"login": "ada-dev", "type": "User"}],
+  "user": {"login": "Mathih13", "type": "User"},
+  "created_at": "2026-11-20T08:00:00Z"
+}

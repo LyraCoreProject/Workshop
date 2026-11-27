@@ -1,0 +1,10 @@
+{
+  "number": 1901,
+  "title": "Typo in the quickstart",
+  "state": "closed",
+  "body": "",
+  "labels": [{"name": "documentation"}],
+  "assignees": [],
+  "user": {"login": "cy-dev", "type": "User"},
+  "created_at": "2026-11-23T08:00:00Z"
+}

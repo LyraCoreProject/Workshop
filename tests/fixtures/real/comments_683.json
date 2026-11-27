@@ -1,0 +1,12 @@
+[
+    {
+        "body": "Thanks @suprsokr for tracing the changing list order to the subscription cache and cross-Shard collection. Sorting the complete list in the message builder gives every enumeration the same ascending guid order, including after a Transfer.\n\nNo code changes were needed. All nine CI checks passed, and ",
+        "created_at": "2026-10-11T18:41:52Z",
+        "id": 6112380020,
+        "updated_at": "2026-10-11T18:41:52Z",
+        "user": {
+            "login": "Mathih13",
+            "type": "User"
+        }
+    }
+]

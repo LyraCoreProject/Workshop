@@ -1,0 +1,4 @@
+[
+  {"id": 11, "event": "assigned", "actor": {"login": "github-actions[bot]", "type": "Bot"}, "assignee": {"login": "bob-dev", "type": "User"}, "created_at": "2026-11-26T14:00:00Z"},
+  {"id": 12, "event": "labeled", "actor": {"login": "github-actions[bot]", "type": "Bot"}, "label": {"name": "in progress"}, "created_at": "2026-11-26T14:00:00Z"}
+]

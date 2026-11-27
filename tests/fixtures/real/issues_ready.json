@@ -1,0 +1,71 @@
+[
+  {
+    "assignees": [],
+    "body": "**Expected (1.12.1).** A Game Event changes more than which spawns stand. Scripted events (vmangos `hardcoded`: Darkmoon Faire, Elemental Invasions, Scourge Invasion, the AQ War Effort, Fireworks, Toasting Goblets, Minions of Omen, Dragons of Nightmare) are started and stopped by their handlers. A running event also offers its quests (`game_event_quest`), changes vendor item lists, swaps creature models, equipment and entries (`game_event_creature_data`), sends event mail, and can be tested by conditions in gossip, loot and scripts.\n\n**Actual** (at `feda1c4e`, after #1319). Calendar events gat",
+    "created_at": "2026-11-26T17:51:28Z",
+    "labels": [
+      {
+        "name": "enhancement"
+      },
+      {
+        "name": "P3"
+      },
+      {
+        "name": "ready-for-agent"
+      }
+    ],
+    "number": 1320,
+    "title": "Game Events gate spawns only: scripted events, event quests, vendors, creature swaps and mail are missing",
+    "updated_at": "2026-11-26T20:09:06Z",
+    "user": {
+      "login": "Mathih13",
+      "type": "User"
+    }
+  },
+  {
+    "assignees": [],
+    "body": "**Expected.** The wire-harness suite's \"N passed\" summary only counts scenarios that actually ran. A scenario file that fails to even start must show up as a startup failure, never as a silent absence from the count.\n\n**Actual** (at `87109e3c`, harness pin `v0.1.0-alpha.13`). Fixed. The harness resolves file-based scenarios through `$ADAPTER_DIR` instead of the core checkout's working directory, accepts a named subset, and a script that fails to start is counted separately as a startup failure (`SPAWN_N`) in the suite summary. Any startup failure makes the run exit 2 with \"RESULT: ERROR, scena",
+    "created_at": "2026-08-11T08:20:54Z",
+    "labels": [
+      {
+        "name": "bug"
+      },
+      {
+        "name": "P2"
+      },
+      {
+        "name": "ready-for-agent"
+      }
+    ],
+    "number": 105,
+    "title": "Run the full wire-harness suite on a development Realm and record every result",
+    "updated_at": "2026-10-08T08:55:34Z",
+    "user": {
+      "login": "Mathih13",
+      "type": "User"
+    }
+  },
+  {
+    "assignees": [],
+    "body": "**Expected.** A server-side plausibility check flags implausible client-reported movement without ever rejecting it inline, so a false positive never rubber-bands a legitimate player.\n\n**Actual** (at `87109e3c`). Two of five planned checks exist. `movement_violation` ([module/src/world.rs#L563-L575](https://github.com/LyraCoreProject/LyraCore/blob/87109e3c/module/src/world.rs#L563-L575)) scores a heartbeat delta against a speed ceiling (`SPEED_LEEWAY` over the mover's effective RUN) and a teleport ceiling (60 yd in one delta), and `score_and_log_movement` logs a `game_movement_violation` row f",
+    "created_at": "2026-08-11T08:15:49Z",
+    "labels": [
+      {
+        "name": "enhancement"
+      },
+      {
+        "name": "P3"
+      },
+      {
+        "name": "ready-for-agent"
+      }
+    ],
+    "number": 36,
+    "title": "Movement anti-cheat only scores speed and teleport, not fall, flight or wall-clipping",
+    "updated_at": "2026-10-08T08:56:39Z",
+    "user": {
+      "login": "Mathih13",
+      "type": "User"
+    }
+  }
+]
