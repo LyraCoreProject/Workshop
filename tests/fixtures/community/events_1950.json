@@ -1,0 +1,47 @@
+[
+  {
+    "id": 41,
+    "event": "labeled",
+    "actor": {
+      "login": "github-actions[bot]",
+      "type": "Bot"
+    },
+    "label": {
+      "name": "gap"
+    },
+    "created_at": "2026-11-19T10:00:00Z"
+  },
+  {
+    "id": 42,
+    "event": "labeled",
+    "actor": {
+      "login": "github-actions[bot]",
+      "type": "Bot"
+    },
+    "label": {
+      "name": "in progress"
+    },
+    "created_at": "2026-11-19T10:00:00Z"
+  },
+  {
+    "id": 43,
+    "event": "unlabeled",
+    "actor": {
+      "login": "github-actions[bot]",
+      "type": "Bot"
+    },
+    "label": {
+      "name": "in progress"
+    },
+    "created_at": "2026-11-20T10:00:00Z"
+  },
+  {
+    "id": 44,
+    "event": "closed",
+    "actor": {
+      "login": "github-actions[bot]",
+      "type": "Bot"
+    },
+    "created_at": "2026-11-20T10:00:00Z"
+  }
+]

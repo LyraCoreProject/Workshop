@@ -1,0 +1,85 @@
+[
+  {
+    "number": 1950,
+    "title": "/claim creature_world_behavior-aaedc5f1",
+    "state": "closed",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: creature_world_behavior-aaedc5f1 -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [],
+    "updated_at": "2026-11-20T10:00:00Z"
+  },
+  {
+    "number": 1951,
+    "title": "/claim creature_world_behavior-aaedc5f1",
+    "state": "closed",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: creature_world_behavior-aaedc5f1 -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [],
+    "updated_at": "2026-11-22T10:00:00Z"
+  },
+  {
+    "number": 1952,
+    "title": "/claim cast_and_interrupt-4f97715e",
+    "state": "closed",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: cast_and_interrupt-4f97715e -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "ada-dev",
+        "type": "User"
+      }
+    ],
+    "updated_at": "2026-11-23T10:00:00Z"
+  },
+  {
+    "number": 1953,
+    "title": "/claim cast_and_interrupt-4f97715e",
+    "state": "closed",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: cast_and_interrupt-4f97715e -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [],
+    "updated_at": "2026-11-24T10:00:00Z"
+  },
+  {
+    "number": 1954,
+    "title": "/claim pet_follow-d760a50f",
+    "state": "closed",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: pet_follow-d760a50f -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [],
+    "updated_at": "2026-11-25T10:00:00Z"
+  },
+  {
+    "number": 1955,
+    "title": "/claim refused",
+    "state": "closed",
+    "body": "Refused: no such gap.",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [],
+    "updated_at": "2026-11-26T10:00:00Z"
+  }
+]

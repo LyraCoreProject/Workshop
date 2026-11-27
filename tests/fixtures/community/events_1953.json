@@ -1,0 +1,23 @@
+[
+  {
+    "id": 71,
+    "event": "labeled",
+    "actor": {
+      "login": "eve",
+      "type": "User"
+    },
+    "label": {
+      "name": "gap"
+    },
+    "created_at": "2026-11-24T08:00:00Z"
+  },
+  {
+    "id": 72,
+    "event": "closed",
+    "actor": {
+      "login": "eve",
+      "type": "User"
+    },
+    "created_at": "2026-11-24T10:00:00Z"
+  }
+]

@@ -1,0 +1,111 @@
+[
+  {
+    "number": 3001,
+    "title": "fix: a pull request",
+    "body": "Fixes #2002",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [],
+    "pull_request": {
+      "url": "x"
+    }
+  },
+  {
+    "number": 2005,
+    "title": "/claim cast_and_interrupt-4f97715e",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: cast_and_interrupt-4f97715e -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      },
+      {
+        "name": "in progress"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "mallory",
+        "type": "User"
+      }
+    ],
+    "updated_at": "2026-11-27T12:00:00Z"
+  },
+  {
+    "number": 2004,
+    "title": "/claim pet_follow-d760a50f",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: pet_follow-d760a50f -->\n",
+    "labels": [
+      {
+        "name": "gap"
+      },
+      {
+        "name": "in progress"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "Mathih13",
+        "type": "User"
+      }
+    ],
+    "updated_at": "2026-11-25T08:00:00Z"
+  },
+  {
+    "number": 2003,
+    "title": "/claim creature_world_behavior-4b52062e",
+    "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: creature_world_behavior-4b52062e -->\n",
+    "labels": [
+      {
+        "name": "in progress"
+      },
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "bob-dev",
+        "type": "User"
+      }
+    ],
+    "updated_at": "2026-11-26T14:00:00Z"
+  },
+  {
+    "number": "two thousand",
+    "title": "A record in a shape Workshop does not know"
+  },
+  {
+    "number": 2006,
+    "title": "/claim nothing_real-00000000",
+    "body": "No marker here, only a claim waiting for the workflow.",
+    "labels": [
+      {
+        "name": "gap"
+      }
+    ],
+    "assignees": []
+  },
+  {
+    "number": 2002,
+    "title": "/claim cast_and_interrupt-52f5323c",
+    "body": "<!-- lyracore-gap: cast_and_interrupt-52f5323c -->",
+    "labels": [
+      {
+        "name": "gap"
+      },
+      {
+        "name": "in progress"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "ada-dev",
+        "type": "User"
+      }
+    ],
+    "updated_at": "2026-11-27T10:00:00Z"
+  }
+]

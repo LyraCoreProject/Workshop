@@ -1,5 +1,6 @@
 //! GitHub REST records, reduced to the fields Workshop reads.
 
+use crate::ledger::LedgerFile;
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 use serde::de::DeserializeOwned;
@@ -27,7 +28,6 @@ pub struct Label {
 #[derive(Debug, Clone, Deserialize)]
 pub struct Issue {
     pub number: u64,
-    pub title: String,
     #[serde(default)]
     pub body: Option<String>,
     #[serde(default)]
@@ -37,7 +37,7 @@ pub struct Issue {
     #[serde(default)]
     pub pull_request: Option<Value>,
     #[serde(default)]
-    pub created_at: Option<DateTime<Utc>>,
+    pub updated_at: Option<DateTime<Utc>>,
 }
 
 impl Issue {
@@ -115,10 +115,25 @@ pub struct Event {
     pub created_at: DateTime<Utc>,
 }
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct TreeEntry {
+    pub path: String,
+    #[serde(rename = "type")]
+    pub kind: String,
+    pub sha: String,
+}
+
 /// Everything one refresh read from GitHub. A missing map entry is a fact Workshop does not know.
 #[derive(Debug, Clone, Default)]
 pub struct Raw {
-    pub tasks: Vec<Issue>,
+    pub ledger: Vec<LedgerFile>,
+    /// Ledger files whose raw copy did not yet match the tree, so they are left out this time.
+    pub ledger_waiting: usize,
+    pub gap_issues: Vec<Issue>,
+    pub closed_gap_issues: Vec<Issue>,
+    /// Closed claim issues whose events Workshop has not read yet, so it cannot trust them.
+    pub closed_unchecked: usize,
+    pub authenticated: bool,
     pub claim_events: HashMap<u64, Vec<Event>>,
     pub open_pulls: Vec<Pull>,
     pub merged_pulls: Vec<MergedPull>,

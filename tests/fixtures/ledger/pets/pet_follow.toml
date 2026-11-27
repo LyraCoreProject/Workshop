@@ -1,0 +1,9 @@
+id = "pet_follow"
+system = "pets"
+scenarios = ["pet_follow"]
+
+[[known_gaps]]
+description = "A Hunter's pet does not return to its owner after a kill."
+path = "module/src/pet/follow.rs"
+symbol = "after_kill"
+evidence = "Source reading, not measured."

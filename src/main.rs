@@ -1,5 +1,6 @@
 mod config;
 mod github;
+mod ledger;
 mod mcp;
 mod raw;
 mod snapshot;
@@ -8,7 +9,7 @@ mod web;
 
 use chrono::Utc;
 use config::{Config, TOKEN_VARIABLE};
-use github::{MergedCache, RestClient};
+use github::{Cache, RestClient};
 use state::AppState;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -22,7 +23,7 @@ fn config_path() -> anyhow::Result<PathBuf> {
 }
 
 async fn refresh_forever(state: Arc<AppState>, gh: RestClient) {
-    let mut cache = MergedCache::default();
+    let mut cache = Cache::default();
     let mut interval = tokio::time::interval(state.config.refresh_interval());
     interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Delay);
     loop {
@@ -33,14 +34,22 @@ async fn refresh_forever(state: Arc<AppState>, gh: RestClient) {
             Ok(raw) => {
                 let snapshot = snapshot::build(&raw, &state.config, Utc::now());
                 eprintln!(
-                    "refreshed: {} tasks, {} open pull requests, {requests} requests",
+                    "refreshed: {} tasks from {} Ledger files ({} unparsed, {} waiting), {} open pull requests, {} API and {} raw requests",
                     snapshot.tasks.len(),
-                    snapshot.open_pulls.len()
+                    snapshot.ledger.files,
+                    snapshot.ledger.unparsed.len(),
+                    snapshot.ledger.waiting,
+                    snapshot.open_pulls.len(),
+                    requests.api,
+                    requests.raw
                 );
                 state.replace(snapshot, requests);
             }
             Err(error) => {
-                eprintln!("refresh failed after {requests} requests: {error:#}");
+                eprintln!(
+                    "refresh failed after {} API and {} raw requests: {error:#}",
+                    requests.api, requests.raw
+                );
                 state.record_error(Utc::now(), format!("{error:#}"), requests);
             }
         }

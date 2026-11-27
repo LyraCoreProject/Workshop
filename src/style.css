@@ -116,3 +116,15 @@ footer {
   font-size: 0.8rem;
   cursor: pointer;
 }
+
+.systems { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; margin: 1rem 0; font-size: 0.925rem; }
+.count { color: var(--muted); font-weight: 400; font-size: 0.85em; }
+h2 .count { font-size: 0.8em; }
+details summary { cursor: pointer; }
+details[open] summary { margin-bottom: 0.25rem; }
+details > p { margin: 0.35rem 0; overflow-wrap: anywhere; }
+code.id { font-size: 0.8rem; }
+.notice { border-left: 3px solid var(--slow); padding-left: 0.75rem; }
+table.garden { width: 100%; border-collapse: collapse; font-size: 0.925rem; }
+table.garden th, table.garden td { text-align: left; padding: 0.3rem 0.5rem 0.3rem 0; border-top: 1px solid var(--line); }
+table.garden th:not(:first-child), table.garden td:not(:first-child) { text-align: right; }
