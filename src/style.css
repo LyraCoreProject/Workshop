@@ -1,0 +1,98 @@
+:root {
+  color-scheme: light dark;
+  --bg: #fdfdfc;
+  --fg: #1d1d1b;
+  --muted: #5d5d58;
+  --line: #e2e1dc;
+  --link: #1f5fb4;
+  --badge: #efeee9;
+  --fast: #1d7a3e;
+  --slow: #8a5a00;
+  --failed: #b42318;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --fg: #e9e8e4;
+    --muted: #a3a29c;
+    --line: #2f2f2c;
+    --link: #8ab4f8;
+    --badge: #2a2a27;
+    --fast: #6fcf8f;
+    --slow: #e6b450;
+    --failed: #f28b82;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+header, main, footer {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+header nav { display: flex; flex-wrap: wrap; gap: 1rem; }
+.brand { font-weight: 700; color: var(--fg); }
+
+a { color: var(--link); text-decoration: none; overflow-wrap: anywhere; }
+a:hover { text-decoration: underline; }
+
+h1 { font-size: 1.5rem; margin: 1.5rem 0 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+.lead { color: var(--muted); }
+
+.items { list-style: none; padding: 0; margin: 1rem 0; }
+ol.items { list-style: decimal; padding-left: 1.5rem; }
+.items li { padding: 0.75rem 0; border-top: 1px solid var(--line); }
+.items p { margin: 0.15rem 0; }
+.title { font-weight: 600; overflow-wrap: anywhere; }
+.meta { color: var(--muted); font-size: 0.925rem; overflow-wrap: anywhere; }
+.open { color: var(--fast); }
+
+.badge, .lane {
+  display: inline-block;
+  padding: 0 0.4rem;
+  border-radius: 0.25rem;
+  background: var(--badge);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.lane.fast { color: var(--fast); }
+.lane.slow { color: var(--slow); }
+.lane.failed { color: var(--failed); }
+
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+pre {
+  background: var(--badge);
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+}
+
+footer {
+  margin-top: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.875rem;
+}

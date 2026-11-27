@@ -1,0 +1,38 @@
+[
+  {
+    "number": 3004,
+    "title": "chore(deps): bump serde",
+    "body": "",
+    "user": {"login": "dependabot[bot]", "type": "Bot"},
+    "draft": false,
+    "state": "open",
+    "created_at": "2026-11-27T13:00:00Z"
+  },
+  {
+    "number": 3003,
+    "title": "fix(pets): a pet returns to its owner after a kill",
+    "body": "Closes #2004",
+    "user": {"login": "Mathih13", "type": "User"},
+    "draft": true,
+    "state": "open",
+    "created_at": "2026-11-26T08:00:00Z"
+  },
+  {
+    "number": 3002,
+    "title": "fix(loot): a <b>bold</b> claim about loot",
+    "body": "No issue for this one.",
+    "user": {"login": "cy-dev", "type": "User"},
+    "draft": false,
+    "state": "open",
+    "created_at": "2026-11-27T12:00:00Z"
+  },
+  {
+    "number": 3001,
+    "title": "fix(combat): Kick interrupts the cast bar",
+    "body": "## What and why\n\nFixes #2002\n",
+    "user": {"login": "ada-dev", "type": "User"},
+    "draft": false,
+    "state": "open",
+    "created_at": "2026-11-27T11:00:00Z"
+  }
+]

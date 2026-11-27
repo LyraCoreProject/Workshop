@@ -1,0 +1,36 @@
+{
+  "incomplete_results": false,
+  "items": [
+    {
+      "body": "## What and why\n\nThe character-selection list shows the same Characters in a different order after each login. The per-Shard read returns subscription-cache order. The cross-Shard union deduplicates the Characters, but it does not sort them. The client shows the list in the order that SMSG_CHAR_ENUM carries.\n\n1.12.1 enumerates Characters by ascending guid (CMaNGOS `CharacterHandler.cpp`). This change sorts the complete list by ascending guid in `build_char_enum`. The order then does not depend on the cache or the Shard iteration order. A Transfer keeps the order stable, because both copies of a Character carry the same guid.\n\nCloses #669\n\n## What you verified\n\nThe commands CI runs, in `.github/workflows/rust.yml`:\n\n- [x] `cargo fmt --all -- --check`\n- [x] `cargo clippy --workspace --all-targets --all-features -- -D warnings`\n- [ ] `cargo test -p lyracore-importer`\n- [ ] `cargo test -p lyracore-module --lib --features=debug_reducers`\n- [ ] `cargo test -p lyracore-module --test build_script`\n- [ ] `cargo test -p lyracore-module --test package_api_lint`\n- [ ] `cargo test -p lyracore-package-delta`\n- [x] `cargo test -p lyracore-gateway` — 1990 passed, 28 ignored\n- [ ] `cargo test -p lyracore-shared`\n- [ ] `cargo test -p lyracore-test-support`\n- [ ] `cargo check --target wasm32-unknown-unknown -p lyracore-module --features=debug_reducers`\n\nOnly the Gateway target reads the changed code, so I did not run the other unit targets.\n\n## What you did NOT verify\n\nA real build-5875 client is not available here, so I did not see the order on the character-selection screen. The codec test supplies two different input orders and asserts one ascending list order.\n\nNo SpacetimeDB node ran, so the durable cross-Shard path is not exercised.\n\n## Risk\n\nGateway only. The Module, the schema and the SMSG_CHAR_ENUM layout do not change; the list order changes. If this is wrong, the client shows the list in the old unstable order, and no Character data changes. Deploy the new Gateway binary only.\n\n- [ ] **Schema change**\n- [ ] **Protocol change** — the 5875 layout is unchanged; only the list order is fixed.\n- [ ] Touches `packages/`\n- [ ] Documentation only.\n\nNone of these boxes apply.\n\n## Notes for the reviewer\n\nStart with the doc comment on `build_char_enum`. The sort is in the message builder, not in the Store, so every caller gets the 1.12.1 order and the Fake store tests the real path.\n\nMy checkout holds an ignored, stale `packages/playerbots` that does not build against `main`. I moved it aside for the workspace clippy run, as a clean CI checkout has no packages.\n\nModels: deepseek-v4.1-flash. Harness: pi.\n",
+      "closed_at": "2026-10-11T18:41:55Z",
+      "created_at": "2026-10-11T17:02:05Z",
+      "labels": [],
+      "number": 683,
+      "pull_request": {
+        "merged_at": "2026-10-11T18:41:55Z"
+      },
+      "title": "fix(character): order the character list by ascending guid",
+      "user": {
+        "login": "suprsokr",
+        "type": "User"
+      }
+    },
+    {
+      "body": "A new Character did not show at character select. The player typed a name on the create screen. The client returned to character select. The list was empty. A logout and login showed the Character.\n\nThe 1.12.1 client sends `CMSG_CHAR_ENUM` immediately after it reads `SMSG_CHAR_CREATE` success. The Gateway answers this Durable Read from the Coordinator's `game_character` subscription cache. The `create_character` Durable Request ran on a call pipe. A call pipe subscribes only `game_config`. The committed row reached the cache on the Coordinator connection. Nothing ordered that update against the call pipe's reducer callback. The read could run first and miss the row.\n\nRun `create_character` on the subscribed Coordinator connection instead. The Gateway already exposes this connection as `visibility_pipe()`. The SpacetimeDB SDK applies a reducer result to the subscribing connection's cache before it runs the reducer callback. The immediate `CMSG_CHAR_ENUM` then reads the committed row.\n\nCloses #659.\n\n## What you verified\n\n- [x] `benilla_durable_created_character_appears_in_the_first_roster`, passed against a private Module and failed with the original call-pipe choice\n- [x] `cargo fmt --all -- --check`\n- [x] `cargo clippy --workspace --all-targets --all-features -- -D warnings`\n- [x] `cargo test --locked -p lyracore-gateway`, 2,139 passed, 0 failed, 29 ignored\n- [x] `a_first_kalimdor_transfer_arrives_and_recovers_after_import_or_source_finish`, durable against a private Module\n- [x] `benilla_durable_peer_discovery_movement_and_aoi`, durable against a private Module with the default 4 call pipes; it drives the real `Coordinator::create_character`\n- [x] A recorded live run against the local sharded realm with the default 4 call pipes. Before the change: `net: character select — 0 character(s)` immediately after `char create: result 0x2e — Character created`. After the change: `net: character select — 1 character(s)`.\n\nThis change reaches the Gateway only. CI also passed the Module, schema, Package, and Runtime Script checks.\n\nA durable Headless Client regression now checks the first character-list response with four active call pipes. It pauses the Coordinator, checks that creation does not complete while its pump is paused, then reads the first list after success without polling. The test passes with this change and fails at the ordering assertion when `visibility_pipe()` is replaced with `call_pipe()`. It runs in the existing `benilla_durable_` CI group.\n\n## What you did NOT verify\n\nThe live run used the benilla protocol client, not a real build-5875 client.\n\n## Risk\n\nGateway only. Deploy the new Gateway binary. No shard needs a republish because the schema and the Module do not change. If this is wrong, the create call serializes on the Coordinator connection, which every Durable Read already uses. Character creation is rare, so the cost is small.\n\n- [ ] Schema change\n- [ ] Protocol change\n- [ ] Touches `packages/`\n- [ ] Documentation only\n\nNone of these boxes apply.\n\n## Notes for the reviewer\n\nStart with the doc comment on `CharacterStore::create_character`. It states the ordering constraint that this change relies on. The verification videos are with the reporter, not in the repository.\n\nModels: deepseek-v4.1-flash. Harness: pi.\n\nMaintainer follow-up: gpt-6-astra through Codex in T3 Code. Added the ordering regression and repeated the local checks. All nine GitHub checks passed on `ff4e1f7d`.\n",
+      "closed_at": "2026-10-11T06:32:53Z",
+      "created_at": "2026-10-11T04:22:21Z",
+      "labels": [],
+      "number": 660,
+      "pull_request": {
+        "merged_at": "2026-10-11T06:32:53Z"
+      },
+      "title": "fix(character): show a newly created character at character select",
+      "user": {
+        "login": "suprsokr",
+        "type": "User"
+      }
+    }
+  ],
+  "total_count": 2
+}

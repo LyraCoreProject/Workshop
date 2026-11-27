@@ -1,0 +1,23 @@
+{
+  "assignees": [],
+  "body": "**Expected (1.12.1).** The character-selection list keeps a stable order across repeated logins. [CMaNGOS Classic enumerates Characters by ascending guid](https://github.com/cmangos/mangos-classic/blob/8ec338a1704e7dcb1c0213eb7ed58f9231ade40f/src/game/Entities/CharacterHandler.cpp#L316-L329).\n\n**Act",
+  "created_at": "2026-10-11T11:35:27Z",
+  "labels": [
+    {
+      "name": "bug"
+    },
+    {
+      "name": "P2"
+    },
+    {
+      "name": "ready-for-agent"
+    }
+  ],
+  "number": 669,
+  "state": "closed",
+  "title": "The character list changes order after logging in and out",
+  "user": {
+    "login": "Mathih13",
+    "type": "User"
+  }
+}

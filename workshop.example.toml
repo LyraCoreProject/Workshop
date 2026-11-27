@@ -1,0 +1,19 @@
+# Copy to workshop.toml and run `cargo run -- --config workshop.toml`.
+#
+# The optional GitHub token comes from the environment variable WORKSHOP_GITHUB_TOKEN, never from
+# this file. A read-only token with no scopes is enough for a public repository.
+
+# The repository Workshop indexes, as owner/name.
+repository = "LyraCoreProject/LyraCore"
+
+# GitHub logins of the maintainers. Their pull requests are not outside pull requests, and they are
+# not on the leaderboard. Case does not matter.
+maintainers = ["Mathih13"]
+
+# The address the website and the MCP server listen on.
+listen = "127.0.0.1:8080"
+
+# Seconds between refreshes, at least 60. Default 900. Without a token GitHub allows 60 requests an
+# hour, and one refresh costs 2 requests plus 1 per claimed task and 2 per open outside pull request,
+# so keep the default. With a token, 60 is safe.
+refresh_interval_secs = 900

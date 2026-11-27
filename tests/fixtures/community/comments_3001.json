@@ -1,0 +1,16 @@
+[
+  {
+    "id": 101,
+    "user": {"login": "github-actions[bot]", "type": "Bot"},
+    "body": "<!-- lyracore-contribution-check -->\n### Contribution check: fast lane\n\nThe evidence is valid and every changed path is in the fast lane. A maintainer reviews this pull request in the fast lane. You need to do nothing more now.\n",
+    "created_at": "2026-11-27T11:05:00Z",
+    "updated_at": "2026-11-27T11:05:00Z"
+  },
+  {
+    "id": 102,
+    "user": {"login": "mallory", "type": "User"},
+    "body": "<!-- lyracore-contribution-check -->\n### Contribution check: failed\n",
+    "created_at": "2026-11-27T12:00:00Z",
+    "updated_at": "2026-11-27T12:00:00Z"
+  }
+]

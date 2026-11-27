@@ -1,0 +1,13 @@
+{
+  "assignees": [],
+  "body": "**Expected.** In 1.12.1, a successful character creation puts the new character on the\ncharacter-select list without a relogin. The 1.12.1 client re-sends `CMSG_CHAR_ENUM` as soon as it\nreads `SMSG_CHAR_CREATE` success and renders the roster the server returns, so the create screen\nhands back to a l",
+  "created_at": "2026-10-11T04:08:16Z",
+  "labels": [],
+  "number": 659,
+  "state": "closed",
+  "title": "A newly created character is missing from character select until the next login",
+  "user": {
+    "login": "suprsokr",
+    "type": "User"
+  }
+}

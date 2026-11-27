@@ -29,7 +29,7 @@ All of it comes from the GitHub API for the configured repository.
 | --- | --- |
 | A task | An open issue labelled `ready-for-agent` |
 | A claim | That issue also carries the label `in progress` and has an assignee. The claim's start is the time the label was added |
-| The pull request for a task | An open pull request whose description has `Closes #N`, `Fixes #N` or `Resolves #N` |
+| The pull request for a task | An open pull request whose description has `Closes #N`, `Fixes #N`, `Resolves #N` or another form of GitHub's closing keywords |
 | A landed fix | A merged pull request, by an author who is not a maintainer, that closed a task |
 | The review lane | The comment by `github-actions[bot]` that contains `<!-- lyracore-contribution-check -->`. Its heading reads `### Contribution check: fast lane`, `slow lane` or `failed` |
 | A review | A submitted pull request review with a body, on an outside pull request, by an account that is neither its author nor a bot |
@@ -59,7 +59,7 @@ The score is a courtesy, not a gate. It decides nothing about what merges.
 | `/leaderboard` | Accounts by score, with their landed fixes and reviews |
 | `/connect` | How to add the MCP server to an agent, and the link to `CONTRIBUTING.md` |
 | `/snapshot.json` | The whole snapshot, with a `schema_version` |
-| `/healthz` | `ok` and the snapshot's age |
+| `/healthz` | `ok` and the snapshot's age, and the last refresh's error if it failed. Before the first snapshot it answers 503 |
 
 The pages are plain server-rendered HTML with one stylesheet and no script. They work in light and
 dark mode and at phone width.
@@ -90,6 +90,14 @@ cargo run -- --config workshop.toml
 `workshop.example.toml` documents every setting: the repository, the maintainers, the listen
 address and the refresh interval. The token comes from the environment variable
 `WORKSHOP_GITHUB_TOKEN` and is optional.
+
+Without a token GitHub allows 60 requests an hour. Workshop reads over REST only, so it works
+without one. A refresh costs 2 requests (open tasks and open pull requests), plus 1 for each
+claimed task and 2 for each open outside pull request. It also makes one search for merged outside
+pull requests, which GitHub limits separately. A merged pull request does not change, so Workshop
+reads each one's reviews, lane and closed issues once per process. The default interval of 15
+minutes keeps an unauthenticated Workshop inside the limit while a refresh costs at most 15
+requests. A failed refresh keeps the previous snapshot.
 
 ## License
 
