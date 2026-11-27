@@ -1,0 +1,28 @@
+schema_version = 1
+id = "creature_world_behavior"
+system = "creatures"
+scope = "Creatures stand, move and respawn where the world database puts them."
+scenarios = []
+
+[vmangos]
+commit = "d9173eca3ea08dd985c52dabbcc826898d1d0b77"
+path = "src/game/Objects/Creature.cpp"
+symbol = "Creature::Update"
+
+[[known_gaps]]
+description = "Creature 3 Flesh Eating Worm has no spawn in Elwynn Forest."
+path = "importer/src/world/creature.rs"
+symbol = "import_spawns"
+evidence = "Data Gap: the importer skips the spawn."
+
+[[known_gaps]]
+description = "A creature that leaves combat walks home instead of running. vmangos runs it back at its run speed and heals it on arrival."
+path = "module/src/creature/evade.rs"
+symbol = "start_evade"
+evidence = "Source reading, not measured."
+
+[[known_gaps]]
+description = "A respawned creature keeps the faction its last killer charmed it into."
+path = "module/src/creature/respawn.rs"
+symbol = "respawn"
+evidence = "Source reading, not measured."

@@ -1,4 +1,5 @@
 use crate::config::Config;
+use crate::github::RequestCount;
 use crate::snapshot::Snapshot;
 use chrono::{DateTime, Utc};
 use std::sync::{Arc, RwLock};
@@ -6,7 +7,7 @@ use std::sync::{Arc, RwLock};
 #[derive(Debug, Clone, Default)]
 pub struct Health {
     pub last_error: Option<(DateTime<Utc>, String)>,
-    pub last_request_count: usize,
+    pub last_request_count: RequestCount,
 }
 
 /// The current snapshot and how the last refresh went. Nothing else is kept.
@@ -33,7 +34,7 @@ impl AppState {
         self.health.read().unwrap().clone()
     }
 
-    pub fn replace(&self, snapshot: Snapshot, request_count: usize) {
+    pub fn replace(&self, snapshot: Snapshot, request_count: RequestCount) {
         *self.snapshot.write().unwrap() = Some(Arc::new(snapshot));
         *self.health.write().unwrap() = Health {
             last_error: None,
@@ -42,7 +43,7 @@ impl AppState {
     }
 
     /// A failed refresh keeps the previous snapshot.
-    pub fn record_error(&self, at: DateTime<Utc>, error: String, request_count: usize) {
+    pub fn record_error(&self, at: DateTime<Utc>, error: String, request_count: RequestCount) {
         *self.health.write().unwrap() = Health {
             last_error: Some((at, error)),
             last_request_count: request_count,

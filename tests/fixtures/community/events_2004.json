@@ -1,3 +1,26 @@
 [
-  {"id": 21, "event": "labeled", "actor": {"login": "Mathih13", "type": "User"}, "label": {"name": "in progress"}, "created_at": "2026-11-25T08:00:00Z"}
+  {
+    "id": 21,
+    "event": "labeled",
+    "actor": {
+      "login": "github-actions[bot]",
+      "type": "Bot"
+    },
+    "label": {
+      "name": "gap"
+    },
+    "created_at": "2026-11-25T08:00:00Z"
+  },
+  {
+    "id": 22,
+    "event": "labeled",
+    "actor": {
+      "login": "Mathih13",
+      "type": "User"
+    },
+    "label": {
+      "name": "in progress"
+    },
+    "created_at": "2026-11-25T08:00:00Z"
+  }
 ]

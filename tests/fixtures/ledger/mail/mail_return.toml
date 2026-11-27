@@ -1,0 +1,9 @@
+id = "mail_return"
+system = "mail"
+scenarios = []
+
+[[known_gaps]]
+description = "Mail sent to a deleted Character never returns."
+path = "module/src/mail/expire.rs"
+symbol = "expire_mail"
+evidence = "Source reading, not measured."

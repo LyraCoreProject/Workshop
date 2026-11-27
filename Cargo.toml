@@ -16,6 +16,8 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "rus
 rmcp = { version = "3.12", features = ["server", "macros", "transport-streamable-http-server"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+sha1 = "0.11"
+sha2 = "0.11"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "time"] }
 toml = "0.9"
 

@@ -1,0 +1,18 @@
+{
+  "number": 1952,
+  "title": "/claim cast_and_interrupt-4f97715e",
+  "state": "closed",
+  "body": "Claimed by the workflow.\n\n<!-- lyracore-gap: cast_and_interrupt-4f97715e -->\n",
+  "labels": [
+    {
+      "name": "gap"
+    }
+  ],
+  "assignees": [
+    {
+      "login": "ada-dev",
+      "type": "User"
+    }
+  ],
+  "updated_at": "2026-11-23T10:00:00Z"
+}

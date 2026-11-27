@@ -1,0 +1,54 @@
+{
+  "sha": "f4be9944bed33b5ee37a9621c48372ed46d2a54e",
+  "truncated": false,
+  "tree": [
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1111111111111111111111111111111111111111",
+      "size": 10
+    },
+    {
+      "path": "spells",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2222222222222222222222222222222222222222"
+    },
+    {
+      "path": "combat/broken.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90372fd9cb06e7d075c0cd94dc45f5443e8cc00a",
+      "size": 74
+    },
+    {
+      "path": "creatures/creature_world_behavior.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4557d00c74232355821a3c39f3639dac8171ec07",
+      "size": 972
+    },
+    {
+      "path": "mail/mail_return.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0000000000000000000000000000000000000000",
+      "size": 231
+    },
+    {
+      "path": "pets/pet_follow.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95564e5282903c0128b9fddee6a36af34a13f144",
+      "size": 250
+    },
+    {
+      "path": "spells/cast_and_interrupt.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e0d181fa421bc95eb41097646c2876147295354",
+      "size": 1788
+    }
+  ]
+}
