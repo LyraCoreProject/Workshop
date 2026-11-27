@@ -96,3 +96,23 @@ footer {
   color: var(--muted);
   font-size: 0.875rem;
 }
+
+.steps { padding-left: 1.5rem; }
+.steps li { margin: 0.75rem 0; }
+.steps p { margin: 0.25rem 0; }
+.copy { position: relative; }
+.copy pre { margin: 0; padding-right: 4.5rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.copy code { user-select: all; }
+.copy button {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}

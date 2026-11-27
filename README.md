@@ -54,15 +54,17 @@ The score is a courtesy, not a gate. It decides nothing about what merges.
 
 | Page | Shows |
 | --- | --- |
-| `/` | Open tasks. Each has its title, its priority label, its claim holder and the claim's age, and its pull request with the review lane |
+| `/` | The two things a contributor copies, and nothing else: a clone command, and a prompt for an agent started in the clone |
+| `/tasks` | Open tasks. Each has its title, its priority label, its claim holder and the claim's age, and its pull request with the review lane |
 | `/reviews` | Open outside pull requests, oldest first, with their lane and the reviews they already have |
 | `/leaderboard` | Accounts by score, with their landed fixes and reviews |
-| `/connect` | How to add the MCP server to an agent, and the link to `CONTRIBUTING.md` |
+| `/connect` | How to add the MCP server to an agent. Contributing does not need it |
 | `/snapshot.json` | The whole snapshot, with a `schema_version` |
 | `/healthz` | `ok` and the snapshot's age, and the last refresh's error if it failed. Before the first snapshot it answers 503 |
 
-The pages are plain server-rendered HTML with one stylesheet and no script. They work in light and
-dark mode and at phone width.
+The pages are plain server-rendered HTML with one stylesheet. The only script is `copy.js`, which
+gives each copyable block a Copy button; without it a click selects the block. The pages work in
+light and dark mode and at phone width.
 
 ## The MCP server
 
@@ -71,7 +73,7 @@ tool only reads.
 
 | Tool | Returns |
 | --- | --- |
-| `rules` | How to contribute, in a few lines, and where the full rules are |
+| `rules` | The clone command, the start prompt, the steps in a few lines, and where the full rules are |
 | `list_tasks` | Open tasks. `unclaimed_only` leaves out claimed ones |
 | `get_task` | One task: the issue body, its claim, its pull request and the exact command that claims it |
 | `my_work` | For a GitHub login: its claims, its open pull requests and their lanes |
@@ -88,7 +90,7 @@ cargo run -- --config workshop.toml
 ```
 
 `workshop.example.toml` documents every setting: the repository, the maintainers, the listen
-address and the refresh interval. The token comes from the environment variable
+address, the start prompt and the refresh interval. The token comes from the environment variable
 `WORKSHOP_GITHUB_TOKEN` and is optional.
 
 Without a token GitHub allows 60 requests an hour. Workshop reads over REST only, so it works

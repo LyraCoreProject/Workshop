@@ -14,6 +14,8 @@ pub struct Config {
     #[serde(default)]
     pub maintainers: Vec<String>,
     pub listen: SocketAddr,
+    /// What a contributor pastes into an agent started in a clone of the repository.
+    pub start_prompt: String,
     #[serde(default = "default_refresh_interval_secs")]
     pub refresh_interval_secs: u64,
 }
@@ -46,6 +48,9 @@ impl Config {
         }) {
             bail!("maintainer {login:?} is not a GitHub login");
         }
+        if config.start_prompt.trim().is_empty() {
+            bail!("start_prompt must not be empty");
+        }
         if config.refresh_interval_secs < MINIMUM_REFRESH {
             bail!("refresh_interval_secs must be at least {MINIMUM_REFRESH}");
         }
@@ -54,6 +59,14 @@ impl Config {
 
     pub fn refresh_interval(&self) -> Duration {
         Duration::from_secs(self.refresh_interval_secs)
+    }
+
+    pub fn clone_command(&self) -> String {
+        let name = self.repository.rsplit('/').next().unwrap_or_default();
+        format!(
+            "git clone https://github.com/{} && cd {name}",
+            self.repository
+        )
     }
 
     pub fn is_maintainer(&self, login: &str) -> bool {
@@ -70,6 +83,7 @@ pub fn test_config() -> Config {
         repository = "LyraCoreProject/LyraCore"
         maintainers = ["Mathih13"]
         listen = "127.0.0.1:8080"
+        start_prompt = "Follow the skill and fix one issue."
         "#,
     )
     .unwrap()

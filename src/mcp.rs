@@ -106,7 +106,7 @@ impl Workshop {
 
     #[tool(description = "How to contribute, in a few lines, and where the full rules are.")]
     pub fn rules(&self) -> String {
-        rules_text(&self.state.config.repository)
+        rules_text(&self.state.config)
     }
 
     #[tool(
@@ -211,15 +211,18 @@ impl Workshop {
     }
 }
 
-pub fn rules_text(repository: &str) -> String {
+pub fn rules_text(config: &crate::config::Config) -> String {
+    let repository = &config.repository;
+    let (clone, prompt) = (config.clone_command(), &config.start_prompt);
     format!(
         "Workshop lists the open tasks of https://github.com/{repository}. The work happens there, with your own GitHub account.\n\
+         To do all of it in one go, run `{clone}` and follow this prompt in that folder: {prompt}\n\
+         The steps it covers:\n\
          1. Pick an unclaimed task: list_tasks with unclaimed_only, then get_task.\n\
          2. Claim it with the command get_task gives: gh issue comment N -R {repository} --body \"/claim\". A workflow assigns you and adds the label `in progress`. You can hold {MAX_CLAIMS} claims.\n\
          3. Within 24 hours, open a draft pull request whose description says `Closes #N`, or the claim ends. Comment /release on the issue to give it up.\n\
          4. A check comments on your pull request with its review lane: fast lane, slow lane or failed. Fix what a failed check names.\n\
          5. Review other outside pull requests: list_reviews_wanted.\n\
-         The repository's `contribute-fix` skill (.claude/skills/contribute-fix/SKILL.md) walks an agent through all of it.\n\
          Workshop only reads. It never claims, comments or reviews for you.\n\
          Full rules: https://github.com/{repository}/blob/main/CONTRIBUTING.md"
     )
