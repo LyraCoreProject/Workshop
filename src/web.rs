@@ -15,10 +15,12 @@ const STYLE: &str = include_str!("style.css");
 
 pub fn router(state: Arc<AppState>) -> Router {
     Router::new()
-        .route("/", get(tasks_page))
+        .route("/", get(start_page))
+        .route("/tasks", get(tasks_page))
         .route("/reviews", get(reviews_page))
         .route("/leaderboard", get(leaderboard_page))
         .route("/connect", get(connect_page))
+        .route("/copy.js", get(copy_script))
         .route("/snapshot.json", get(snapshot_json))
         .route("/healthz", get(healthz))
         .route("/style.css", get(style))
@@ -70,15 +72,16 @@ fn page(title: &str, state: &AppState, snapshot: Option<&Snapshot>, body: Markup
                 meta name="viewport" content="width=device-width, initial-scale=1";
                 title { (title) " · Workshop" }
                 link rel="stylesheet" href="/style.css";
+                script src="/copy.js" defer {}
             }
             body {
                 header {
                     a.brand href="/" { "Workshop" }
                     nav {
-                        a href="/" { "Tasks" }
+                        a href="/tasks" { "Tasks" }
                         a href="/reviews" { "Reviews" }
                         a href="/leaderboard" { "Leaderboard" }
-                        a href="/connect" { "Connect" }
+                        a href="/connect" { "MCP" }
                     }
                 }
                 main {
@@ -140,13 +143,50 @@ fn pull_line(pull: &OpenPull) -> Markup {
     }
 }
 
+fn copyable(text: &str) -> Markup {
+    html! {
+        div.copy {
+            pre { code { (text) } }
+            button type="button" hidden { "Copy" }
+        }
+    }
+}
+
+/// The two things a contributor copies: a clone command, then a prompt for their agent.
+fn start_block(state: &AppState) -> Markup {
+    let repository = &state.config.repository;
+    html! {
+        p.lead {
+            "Two steps put your agent to work on " (repository) ". It sets up the machine, claims an " a href="/tasks" { "open task" } ", "
+            "fixes it and opens the pull request. You need git and a signed-in "
+            a href="https://cli.github.com/" { "GitHub CLI" } " (" code { "gh auth login" } ")."
+        }
+        ol.steps {
+            li {
+                p { "Run this in a terminal." }
+                (copyable(&state.config.clone_command()))
+            }
+            li {
+                p { "Start your agent in that folder and paste this." }
+                (copyable(&state.config.start_prompt))
+            }
+        }
+        p.meta {
+            "Only maintainers merge. The full rules are in "
+            a href={ "https://github.com/" (repository) "/blob/main/CONTRIBUTING.md" } { "CONTRIBUTING.md" } "."
+        }
+    }
+}
+
+pub fn render_start(state: &AppState, snapshot: Option<&Snapshot>) -> Markup {
+    page("Lend your agent", state, snapshot, start_block(state))
+}
+
 pub fn render_tasks(state: &AppState, snapshot: Option<&Snapshot>, now: DateTime<Utc>) -> Markup {
     let body = html! {
         @if let Some(snapshot) = snapshot {
             p.lead {
-                "Pick an unclaimed task, comment " code { "/claim" } " on its issue, and open a draft pull request that says "
-                code { "Closes #N" } " within 24 hours. "
-                a href="/connect" { "Connect your agent" } " to do the same through MCP."
+                "The tasks an agent can claim, highest priority first. " a href="/" { "Lend your agent" } " to take one."
             }
             @if snapshot.tasks.is_empty() {
                 p { "No open tasks right now." }
@@ -267,13 +307,15 @@ pub fn render_connect(state: &AppState, snapshot: Option<&Snapshot>, url: &str) 
     );
     let body = html! {
         p.lead {
-            "Workshop speaks MCP over streamable HTTP at " code { (url) } ". It needs no sign-in, and every tool only reads."
+            "Optional. Your agent needs none of this to contribute: the " a href="/" { "two steps" } " are enough. "
+            "The MCP server lets an agent read the tasks, claims, reviews and leaderboard. It speaks streamable HTTP at "
+            code { (url) } ", needs no sign-in, and every tool only reads."
         }
         h2 { "Claude Code" }
-        pre { code { "claude mcp add --transport http workshop " (url) } }
+        (copyable(&format!("claude mcp add --transport http workshop {url}")))
         h2 { "Another agent" }
         p { "Most agents take a server entry like this one:" }
-        pre { code { (json) } }
+        (copyable(&json))
         h2 { "Then" }
         p {
             "Ask your agent to call " code { "rules" } " and pick a task. Workshop never claims, comments or reviews for you: "
@@ -285,7 +327,12 @@ pub fn render_connect(state: &AppState, snapshot: Option<&Snapshot>, url: &str) 
             "."
         }
     };
-    page("Connect", state, snapshot, body)
+    page("MCP server", state, snapshot, body)
+}
+
+async fn start_page(State(state): State<Arc<AppState>>) -> Response {
+    let snapshot = state.snapshot();
+    respond(render_start(&state, snapshot.as_deref()), true)
 }
 
 async fn tasks_page(State(state): State<Arc<AppState>>) -> Response {
@@ -363,6 +410,14 @@ pub fn health_text(state: &AppState, now: DateTime<Utc>) -> (StatusCode, String)
 
 async fn healthz(State(state): State<Arc<AppState>>) -> Response {
     health_text(&state, Utc::now()).into_response()
+}
+
+async fn copy_script() -> Response {
+    (
+        [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+        include_str!("copy.js"),
+    )
+        .into_response()
 }
 
 async fn style() -> Response {
@@ -466,15 +521,25 @@ mod tests {
     #[tokio::test]
     async fn every_page_escapes_text_from_github() {
         let state = ready_state().await;
-        for path in ["/", "/reviews", "/leaderboard", "/connect"] {
+        for path in ["/", "/tasks", "/reviews", "/leaderboard", "/connect"] {
             let (status, html) = get(state.clone(), path).await;
             assert_eq!(status, StatusCode::OK, "{path}");
             assert!(!html.contains("<script>"), "{path}");
             assert!(!html.contains("<b>bold</b>"), "{path}");
             assert!(html.contains("/style.css"), "{path}");
-            assert!(!html.contains("<script"), "{path} has no script");
+            assert_eq!(
+                html.matches("<script").count(),
+                1,
+                "{path} has only copy.js"
+            );
         }
         let tasks = render_tasks(&state, state.snapshot().as_deref(), now()).into_string();
+        let start = render_start(&state, state.snapshot().as_deref()).into_string();
+        assert!(start.contains(
+            "git clone https://github.com/LyraCoreProject/LyraCore &amp;&amp; cd LyraCore"
+        ));
+        assert!(start.contains("Follow the skill and fix one issue."));
+        assert!(!start.contains("Kick ignores the cast bar"));
         assert!(tasks.contains("&lt;script&gt;alert(1)&lt;/script&gt; Kick ignores the cast bar"));
         assert!(tasks.contains("Held by ada-dev for 10 h"));
         assert!(tasks.contains("Held by bob-dev for 30 h, claim lapsed"));
@@ -490,7 +555,9 @@ mod tests {
     async fn before_the_first_refresh_pages_say_so_and_health_is_unavailable() {
         let state = Arc::new(AppState::new(test_config()));
         state.record_error(now(), "GET /x: 403 Forbidden".into(), 1);
-        let (status, html) = get(state.clone(), "/").await;
+        let (status, _) = get(state.clone(), "/").await;
+        assert_eq!(status, StatusCode::OK);
+        let (status, html) = get(state.clone(), "/tasks").await;
         assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE);
         assert!(html.contains(NOT_READY));
         let (status, _) = get(state.clone(), "/connect").await;
